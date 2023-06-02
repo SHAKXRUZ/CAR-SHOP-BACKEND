@@ -2,7 +2,8 @@ const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-const userRouter = require("./router/user_router.js");
+const usersRouter = require("./router/users_router.js");
+const middleware = require("./middleware/users_middleware.js");
 
 dotenv.config();
 const PORT = process.env.PORT || 5001;
@@ -10,8 +11,9 @@ const PORT = process.env.PORT || 5001;
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(middleware);
 
-app.use("/users", userRouter);
+app.use("/users", usersRouter);
 
 app.listen(PORT, () => {
   console.log("http://localhost:" + PORT + " is running");

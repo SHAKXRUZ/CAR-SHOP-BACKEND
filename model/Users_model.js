@@ -1,10 +1,10 @@
 const { sequelize, DataTypes, UUIDV4 } = require("../config/db_config.js");
 
-const User = sequelize.define("user", {
+const Users = sequelize.define("users", {
   id: {
-    type: DataTypes.TEXT,
-    primaryKey: true,
+    type: DataTypes.STRING,
     defaultValue: UUIDV4,
+    primaryKey: true,
   },
   username: {
     type: DataTypes.STRING,
@@ -18,7 +18,7 @@ const User = sequelize.define("user", {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  img_url: {
+  user_images: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -28,4 +28,4 @@ const User = sequelize.define("user", {
     defaultValue: "user",
   },
 });
-module.exports = User;
+module.exports = Users;
