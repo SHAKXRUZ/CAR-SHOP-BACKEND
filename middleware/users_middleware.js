@@ -12,7 +12,7 @@ const middleware = async (req, res, next) => {
     const { token } = req.headers;
     let userId = jwt.verify(token, process.env.SECRET_KEY);
 
-    await Users.findOne({ where: { id: userId } });
+    await Users.findOne({ where: { id: userId.id } });
 
     next();
   } catch (error) {
