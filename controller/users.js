@@ -6,7 +6,7 @@ dotenv.config();
 
 // Users.sync({ force: false });
 
-const getUsers = async (_, res) => {
+const getUsers = async (req, res) => {
   let users = await Users.findAll();
   res.json(users);
 };
@@ -131,9 +131,51 @@ const getProfelImages = async (req, res) => {
   }
 };
 
+const searchUser = async (req, res) => {
+  try {
+    const { search } = req.headers;
+
+    let searchToLowerCase = search.toLowerCase();
+
+    let searchValidation = searchToLowerCase.trim();
+
+    let objUsername = await Users.findAll({
+      where: { username: searchValidation },
+    });
+    let objEmail = await Users.findAll({
+      where: { email: searchValidation },
+    });
+    let objPassword = await Users.findAll({
+      where: { password: searchValidation },
+    });
+    let objRole = await Users.findAll({
+      where: { role: searchValidation },
+    });
+    if (!objUsername[0] && !objEmail[0] && !objPassword[0]) {
+      return res.status(201).send(objRole);
+    } else if (!objUsername[0] && !objEmail[0] && !objRole[0]) {
+      return res.status(201).send(objPassword);
+    } else if (!objUsername[0] && !objPassword[0] && !objRole[0]) {
+      return res.status(201).send(objEmail);
+    } else if (!objEmail[0] && !objPassword[0] && !objRole[0]) {
+      return res.status(201).send(objUsername);
+    } else if (
+      !objEmail[0] &&
+      !objPassword[0] &&
+      objRole[0] &&
+      objUsername[0]
+    ) {
+      return res.status(201).send(objUsername);
+    }
+  } catch {
+    res.send({ msg: "Error" });
+  }
+};
+
 module.exports = {
   getUsers,
   userRegistr,
   userLogin,
   getProfelImages,
+  searchUser,
 };
