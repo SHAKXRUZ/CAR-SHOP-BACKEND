@@ -212,7 +212,9 @@ const userProfelEdit = async (req, res) => {
     return res.status(401).send({ msg: "You didn't edit anything?" });
   }
 
-  let hashPassword = await bcrypt.hash(passwordValidation, 12);
+  let hashPassword = passwordValidation
+    ? await bcrypt.hash(passwordValidation, 12)
+    : usersObj.password;
 
   await Users.update(
     {
