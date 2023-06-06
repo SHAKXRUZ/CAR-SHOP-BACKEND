@@ -172,10 +172,75 @@ const searchUser = async (req, res) => {
   }
 };
 
+const getUserProfel = async (req, res) => {
+  try {
+    const { token } = req.headers;
+
+    let tokenVerify = jwt.verify(token, process.env.SECRET_KEY);
+
+    let userObj = await Users.findOne({
+      where: { id: tokenVerify.id },
+    });
+
+    res.json(userObj);
+  } catch {
+    res.send({ msg: "Error" });
+  }
+};
+
+const userProfelEdit = async (req, res) => {
+  // try {
+  const { username, email, password, user_images } = req.body;
+  const { token } = req.headers;
+
+  let tokenVerify = jwt.verify(token, process.env.SECRET_KEY);
+
+  let usernameValidation = username.trim().toLowerCase();
+  let emailValidation = email.trim().toLowerCase();
+  let passwordValidation = password.trim().toLowerCase();
+
+  let usersObj = await Users.findOne({
+    where: { id: tokenVerify.id },
+  });
+
+  if (
+    !usernameValidation &&
+    !emailValidation &&
+    !passwordValidation &&
+    !user_images
+  ) {
+    return res.status(401).send({ msg: "You didn't edit anything?" });
+  }
+
+  let hashPassword = await bcrypt.hash(passwordValidation, 12);
+
+  await Users.update(
+    {
+      username: usernameValidation ? usernameValidation : usersObj.username,
+      email: emailValidation ? emailValidation : usersObj.email,
+      password: hashPassword ? hashPassword : usersObj.password,
+      user_images: user_images ? user_images : usersObj.user_images,
+    },
+    {
+      returning: true,
+      where: {
+        id: usersObj.id,
+      },
+    }
+  );
+
+  return res.status(201).send({ msg: "Profel edit!" });
+  // } catch {
+  //   res.send({ msg: "Error" });
+  // }
+};
+
 module.exports = {
   getUsers,
   userRegistr,
   userLogin,
   getProfelImages,
   searchUser,
+  getUserProfel,
+  userProfelEdit,
 };
