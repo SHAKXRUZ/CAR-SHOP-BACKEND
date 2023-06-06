@@ -282,5 +282,5 @@ module.exports = {
   adminUserUpdate,
   adminUsersDelete,
   adminCategoriyDelete,
-  adminCarsDelete
+  adminCarsDelete,
 };
