@@ -1,4 +1,4 @@
-const { Users } = require("../model");
+const { Users, Categoriy, Cars } = require("../model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -224,8 +224,63 @@ const adminUsersDelete = async (req, res) => {
   }
 };
 
+const adminCategoriyDelete = async (req, res) => {
+  try {
+    const { id } = req.body;
+    const { admin_token } = req.headers;
+
+    let tokenVerify = jwt.verify(admin_token, process.env.SECRET_KEY);
+
+    let tokenVerifyRole = tokenVerify.role;
+
+    if (tokenVerifyRole === process.env.ROLE) {
+      return res.status(401).send({ msg: "You can't delete categories?" });
+    }
+
+    await Categoriy.destroy({
+      returning: true,
+      plain: true,
+      where: {
+        id: id,
+      },
+    });
+
+    await Cars.destroy({
+      returning: true,
+      plain: true,
+      where: {
+        categoriy_id: id,
+      },
+    });
+
+    return res.status(201).send({ msg: "Categoriy deleted!" });
+  } catch {
+    res.send({ msg: "Error" });
+  }
+};
+
+const adminCarsDelete = async (req, res) => {
+  try {
+    const { id } = req.body;
+
+    await Cars.destroy({
+      returning: true,
+      plain: true,
+      where: {
+        id: id,
+      },
+    });
+
+    return res.status(201).send({ msg: "Cars deleted!" });
+  } catch {
+    res.send({ msg: "Error" });
+  }
+};
+
 module.exports = {
   adminLogin,
   adminUserUpdate,
   adminUsersDelete,
+  adminCategoriyDelete,
+  adminCarsDelete
 };
