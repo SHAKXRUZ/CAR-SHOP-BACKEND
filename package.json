@@ -5,8 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon server.js",
-    "start": "node server.js",
-    "test": "cross-env NODE_ENV=test mocha --exit"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "Ismoilov Shakhruz",
@@ -28,6 +27,7 @@
     "pg": "^8.10.0",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.31.0",
+    "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^4.6.3",
     "uuid": "^9.0.0",
     "yamljs": "^0.3.0"

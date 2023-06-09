@@ -189,52 +189,52 @@ const getUserProfel = async (req, res) => {
 };
 
 const userProfelEdit = async (req, res) => {
-  // try {
-  const { username, email, password, user_images } = req.body;
-  const { token } = req.headers;
+  try {
+    const { username, email, password, user_images } = req.body;
+    const { token } = req.headers;
 
-  let tokenVerify = jwt.verify(token, process.env.SECRET_KEY);
+    let tokenVerify = jwt.verify(token, process.env.SECRET_KEY);
 
-  let usernameValidation = username.trim().toLowerCase();
-  let emailValidation = email.trim().toLowerCase();
-  let passwordValidation = password.trim().toLowerCase();
+    let usernameValidation = username.trim().toLowerCase();
+    let emailValidation = email.trim().toLowerCase();
+    let passwordValidation = password.trim().toLowerCase();
 
-  let usersObj = await Users.findOne({
-    where: { id: tokenVerify.id },
-  });
+    let usersObj = await Users.findOne({
+      where: { id: tokenVerify.id },
+    });
 
-  if (
-    !usernameValidation &&
-    !emailValidation &&
-    !passwordValidation &&
-    !user_images
-  ) {
-    return res.status(401).send({ msg: "You didn't edit anything?" });
-  }
-
-  let hashPassword = passwordValidation
-    ? await bcrypt.hash(passwordValidation, 12)
-    : usersObj.password;
-
-  await Users.update(
-    {
-      username: usernameValidation ? usernameValidation : usersObj.username,
-      email: emailValidation ? emailValidation : usersObj.email,
-      password: hashPassword ? hashPassword : usersObj.password,
-      user_images: user_images ? user_images : usersObj.user_images,
-    },
-    {
-      returning: true,
-      where: {
-        id: usersObj.id,
-      },
+    if (
+      !usernameValidation &&
+      !emailValidation &&
+      !passwordValidation &&
+      !user_images
+    ) {
+      return res.status(401).send({ msg: "You didn't edit anything?" });
     }
-  );
 
-  return res.status(201).send({ msg: "Profel edit!" });
-  // } catch {
-  //   res.send({ msg: "Error" });
-  // }
+    let hashPassword = passwordValidation
+      ? await bcrypt.hash(passwordValidation, 12)
+      : usersObj.password;
+
+    await Users.update(
+      {
+        username: usernameValidation ? usernameValidation : usersObj.username,
+        email: emailValidation ? emailValidation : usersObj.email,
+        password: hashPassword ? hashPassword : usersObj.password,
+        user_images: user_images ? user_images : usersObj.user_images,
+      },
+      {
+        returning: true,
+        where: {
+          id: usersObj.id,
+        },
+      }
+    );
+
+    return res.status(201).send({ msg: "Profel edit!" });
+  } catch {
+    res.send({ msg: "Error" });
+  }
 };
 
 module.exports = {
