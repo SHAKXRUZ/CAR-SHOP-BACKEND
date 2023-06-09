@@ -61,10 +61,12 @@ const updateCategoriy = async (req, res) => {
   try {
     const { id, title, img_url } = req.body;
 
-    let titleValidation =
-      title.trim() === ""
-        ? res.status(400).send({ msg: "Categoriy name kiriting?" })
-        : title.trim().toLowerCase();
+    let titleValidation = title.trim().toLowerCase();
+    if (!titleValidation && !img_url) {
+      return res
+        .status(401)
+        .send({ msg: "You didn't add anything to the update?" });
+    }
 
     let categoriyObj = await Categoriy.findOne({
       where: { id: id },
