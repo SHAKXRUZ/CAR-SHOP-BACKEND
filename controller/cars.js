@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
-// Cars.sync({ force: false });
+Cars.sync({ force: false });
 
 const getUsers = async (req, res) => {
   let cars = await Cars.findAll();

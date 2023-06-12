@@ -2,7 +2,7 @@ const { Cars, Basket } = require("../model");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
-// Basket.sync({ force: false });
+Basket.sync({ force: false });
 
 const getBasket = async (req, res) => {
   try {
