@@ -2,14 +2,7 @@ const { Sequelize, DataTypes, UUIDV4 } = require("sequelize");
 const dotenv = require("dotenv");
 dotenv.config();
 
-const sequelize = new Sequelize({
-  username: process.env.DATABASE,
-  database: process.env.DATABASE_NAME,
-  password: process.env.DATABASE_PASSWORD,
-  port: process.env.DATABASE_PORT,
-  host: process.env.DATABASE_HOST,
-  dialect: process.env.DATABASE_DIALECT,
-});
+const sequelize = new Sequelize(process.env.URL);
 
 sequelize
   .authenticate()
