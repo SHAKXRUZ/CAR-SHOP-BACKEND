@@ -2,7 +2,7 @@ const { Categoriy } = require("../model");
 const dotenv = require("dotenv");
 dotenv.config();
 
-// Categoriy.sync({ force: false });
+Categoriy.sync({ force: false });
 
 const getCategoriys = async (req, res) => {
   let categoriy = await Categoriy.findAll();

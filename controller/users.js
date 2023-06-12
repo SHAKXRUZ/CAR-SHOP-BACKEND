@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
-// Users.sync({ force: false });
+Users.sync({ force: false });
 
 const getUsers = async (req, res) => {
   let users = await Users.findAll();
